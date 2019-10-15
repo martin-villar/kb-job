@@ -6,9 +6,8 @@ let results = new mongoose.Schema({
 }, {_id: false});
 
 let TaskSchema = mongoose.Schema({
-    id: Number,
     name: String,
-    state: Boolean,
+    completed: Boolean,
     results: results
 });
 

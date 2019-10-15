@@ -10,12 +10,13 @@ exports.create = (req, res) => {
     }
 
     // Create a Task
-    const Task = new Task({
+    const task = new Task({
         name: req.body.name,
+        completed: false,
     });
 
     // Save Task in the database
-    Task.save()
+    task.save()
     .then(data => {
         res.send(data);
     }).catch(err => {
