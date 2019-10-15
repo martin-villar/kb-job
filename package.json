@@ -5,13 +5,17 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./node_modules/mocha/bin/mocha"
   },
   "author": "Martin Villar",
   "license": "MIT",
   "dependencies": {
+    "assert": "^2.0.0",
     "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "express": "^4.16.4",
+    "mocha": "^6.2.1",
     "mongoose": "^5.4.2",
     "nodemon": "^1.19.3"
   }
