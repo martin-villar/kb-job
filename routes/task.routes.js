@@ -3,6 +3,7 @@ var router = express.Router();
 const path = require('path');
 var multer = require('multer');
 const Task = require('../models/task.model');
+const User = require('../models/user.model');
 const tasks = require('../controllers/task.controller')
 
 
@@ -21,28 +22,32 @@ var upload = multer({
 
 const sUpload = upload.single('imageupload');
 router.post('/', sUpload, (req, res, next) => {
-  // console.log(req.file)
-  const task = new Task({
-    name: req.file.originalname,
-    size: req.file.size,
-    completed: false,
-    fileID: req.file.id
-  });
-  task.save(function (err) {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    console.log(res)
-    res.json({
-      "success": "true",
-      "file" : req.file.originalname,
+  if(req.file) {
+    const task = new Task({
+      name: req.file.originalname,
+      userId : req.body.userId,
+      size: req.file.size,
+      completed: false,
+      fileID: req.file.id,
     });
-  })
+    task.save(function (err) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      res.json({
+        "success": "true",
+        "file" : req.file.originalname,
+      });
+    })
+  }
+  else{
+    res.send({ message: 'error - no file selected' });
+  }
 })
 
 router.get('/tasks', tasks.findAll);
 
-router.get('/tasks/:taskId', tasks.findOne);
+router.get('/tasks/:userId', tasks.find);
 
 module.exports = router;

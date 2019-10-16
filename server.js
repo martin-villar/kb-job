@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const config = require('./config.js');
-var index = require('./routes/task.routes');
+var tasks = require('./routes/task.routes');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const multer = require("multer");
@@ -12,7 +12,7 @@ const path = require('path');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-app.use('/', index);
+app.use('/', tasks);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -25,7 +25,6 @@ app.use((req, res, next) => {
 });
 
 // require('./task.routes.js')(app);
-
 // Connecting to the database
 mongoose.connect(config.url, {
     useNewUrlParser: true
