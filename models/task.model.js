@@ -8,7 +8,7 @@ let results = new mongoose.Schema({
 let TaskSchema = mongoose.Schema({
     name: String,
     userId: String,
-    completed: Boolean,
+    state: String,
     results: results,
     size: Number,
     fileID: {

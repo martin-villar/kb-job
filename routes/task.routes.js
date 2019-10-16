@@ -27,7 +27,7 @@ router.post('/', sUpload, (req, res, next) => {
       name: req.file.originalname,
       userId : req.body.userId,
       size: req.file.size,
-      completed: false,
+      state: 'uploaded',
       fileID: req.file.id,
     });
     task.save(function (err) {
@@ -46,8 +46,13 @@ router.post('/', sUpload, (req, res, next) => {
   }
 })
 
+// Fetch all tasks
 router.get('/tasks', tasks.findAll);
 
-router.get('/tasks/:userId', tasks.find);
+// Fetch tasks by userId
+router.get('/tasks/:userId', tasks.findByUser);
+
+// Fetch state of a task by _id
+router.get('/tasks-state/:_id', tasks.findBy);
 
 module.exports = router;

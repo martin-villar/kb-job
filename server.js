@@ -24,7 +24,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// require('./task.routes.js')(app);
 // Connecting to the database
 mongoose.connect(config.url, {
     useNewUrlParser: true

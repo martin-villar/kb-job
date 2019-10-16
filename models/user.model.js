@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const UserSchema = mongoose.Schema({
-    id: Number,
+    id: String,
     tasks: []
 });
 

@@ -3,7 +3,12 @@ extends layout
 block content
   h1 Interview Assignament
   p Upload a file:
-  form(method='post', enctype='multipart/form-data')
-    input(type='text', name='userId', value='UserId')
-    input(type='file', name='imageupload')
-    input(type='submit', name='uploadimage', value='Upload')
+    form(method='POST' enctype='multipart/form-data')
+        div.form-group
+          label(for='name') UserId:
+          input#name.form-control(type='text', placeholder='' name='userId')
+        div.form-group
+          input#email.form-control(type='file', placeholder='' name='imageupload')
+        div.form-group
+          input(type='submit', name='uploadimage', value='Upload')
+
