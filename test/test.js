@@ -9,7 +9,6 @@ chai.use(chaiHttp);
 describe("tasks", function () {
 
     describe("CREATE TASK", function () {
-
         var task = {
             "name": "task121212",
         }
@@ -25,13 +24,28 @@ describe("tasks", function () {
         })
     })
 
-    describe("FIND ALL", function () {
+    describe("FIND ALL TASKS", function () {
         it("Should fetch all tasks", (done) => {
             chai.request('http://localhost:3000')
                 .get("/tasks/")
                 .end((err, result) => {
                     result.should.have.status(200);
-                    // console.log("Result Body:", result.body);
+                    console.log("Result Body:", result.body);
+                    done();
+                })
+        })
+    })
+
+    describe("FIND TASK BY ID", function () {
+        var task = {
+            "_id": "5da5af5ed307911f48a2e216",
+        }
+        it("Should fetch all tasks", (done) => {
+            chai.request('http://localhost:3000')
+                .get("/tasks/"+task._id)
+                .end((err, result) => {
+                    result.should.have.status(200);
+                    console.log("Result Body:", result.body);
                     done();
                 })
         })

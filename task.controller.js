@@ -1,30 +1,30 @@
-const Task = require('./task.model.js');
+const Task = require('./models/task.model');
 
 //Create new Task
-exports.create = (req, res) => {
-    // Request validation
-    if(!req.body) {
-        return res.status(400).send({
-            message: "Task content can not be empty"
-        });
-    }
+// exports.create = (req, res) => {
+//     // Request validation
+//     if(!req.body) {
+//         return res.status(400).send({
+//             message: "Task content can not be empty"
+//         });
+//     }
 
-    // Create a Task
-    const task = new Task({
-        name: req.body.name,
-        completed: false,
-    });
+//     // Create a Task
+//     const task = new Task({
+//         name: req.body.name,
+//         completed: false,
+//     });
 
-    // Save Task in the database
-    task.save()
-    .then(data => {
-        res.send(data);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Something wrong while creating the Task."
-        });
-    });
-};
+//     // Save Task in the database
+//     task.save()
+//     .then(data => {
+//         res.send(data);
+//     }).catch(err => {
+//         res.status(500).send({
+//             message: err.message || "Something wrong while creating the Task."
+//         });
+//     });
+// };
 
 // Retrieve all Tasks from the database.
 exports.findAll = (req, res) => {

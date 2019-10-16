@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1 Interview Assignament
+  p Upload a file:
+  form(method='post', enctype='multipart/form-data')
+    input(type='file', name='imageupload')
+    input(type='submit', name='uploadimage', value='Upload')
