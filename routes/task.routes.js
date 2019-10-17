@@ -31,6 +31,6 @@ router.get('/tasks', tasks.findAll);
 router.get('/tasks/:userId', tasks.findByUser);
 
 // Fetch state of a task by _id
-router.get('/tasks-state/:_id', tasks.findBy);
+router.get('/task-state/:_id', tasks.findBy);
 
 module.exports = router;

@@ -12,4 +12,4 @@ Endpoints:
 /tasks/userid
 
 - fetch state of a task:
-/tasks-state/taskId
+/task-state/taskId
