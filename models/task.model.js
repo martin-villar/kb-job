@@ -11,6 +11,8 @@ let TaskSchema = mongoose.Schema({
     state: String,
     results: results,
     size: Number,
+    jobTime: Number,
+    randNum: Number,
     fileID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'fs' //created by multer gridfs storage

@@ -6,7 +6,6 @@ const Task = require('../models/task.model');
 const User = require('../models/user.model');
 const tasks = require('../controllers/task.controller')
 
-
 const storage = require('multer-gridfs-storage')({
   url: 'mongodb://localhost:27017/kb-db',
   file: (req, file) => {
@@ -21,30 +20,9 @@ var upload = multer({
 })
 
 const sUpload = upload.single('imageupload');
-router.post('/', sUpload, (req, res, next) => {
-  if(req.file) {
-    const task = new Task({
-      name: req.file.originalname,
-      userId : req.body.userId,
-      size: req.file.size,
-      state: 'uploaded',
-      fileID: req.file.id,
-    });
-    task.save(function (err) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      res.json({
-        "success": "true",
-        "file" : req.file.originalname,
-      });
-    })
-  }
-  else{
-    res.send({ message: 'error - no file selected' });
-  }
-})
+
+// Create task
+router.post('/', sUpload, tasks.create)
 
 // Fetch all tasks
 router.get('/tasks', tasks.findAll);

@@ -42,5 +42,3 @@ app.listen(config.serverport, () => {
 app.get('/', function(req, res, next) {
     res.render('index');
 });
-
-
