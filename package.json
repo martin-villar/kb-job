@@ -18,11 +18,11 @@
     "express": "^4.16.4",
     "mocha": "^6.2.1",
     "mongoose": "^5.4.2",
-    "morgan": "~1.7.0",
+    "morgan": "^1.9.1",
     "multer": "^1.2.1",
     "multer-gridfs-storage": "^3.3.0",
     "nodemon": "^1.19.3",
-    "pug": "2.0.0-beta6",
-    "serve-favicon": "~2.3.0"
+    "pug": "^2.0.4",
+    "serve-favicon": "^2.5.0"
   }
 }

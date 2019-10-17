@@ -1,18 +1,20 @@
 const Task = require('../models/task.model');
 const utils = require('../utils/taskSimulator');
+const taskBusiness = require('../business/task.business');
 
 // Create a task
 exports.create = async (req, res) => {
-    // ToDo - move to business object-------------/
-    if(req.file.mimetype !== 'text/plain') {
+    // ToDo - move to validator -------------/
+    let rateLimited = taskBusiness.rateLimit();
+    if(rateLimited) {
         res.json({
-            'message': 'file type not supported',
+            'message': 'rate limit exceeded, task will be queued',
         });
         return;
     }
-    if(req.file.size > 5000  /* || req.file.size < 1000*/) {
+    if(!req.file) {
         res.json({
-            'message': 'file size not supported',
+            'message': 'file is required',
         });
         return;
     }
@@ -22,9 +24,20 @@ exports.create = async (req, res) => {
         });
         return;
     }
+    if(req.file.size > 5000  /* || req.file.size < 1000*/) {
+        res.json({
+            'message': 'file size not supported',
+        });
+        return;
+    }
+    if(req.file.mimetype !== 'text/plain') {
+        res.json({
+            'message': 'file type not supported',
+        });
+        return;
+    }
     //--------------------------------------------/
     if (req.file) {
-        console.log(req.file);
         const task = new Task({
             name: req.file.originalname,
             userId: req.body.userId,
@@ -41,6 +54,7 @@ exports.create = async (req, res) => {
                 'success': 'true',
                 'file': req.file.originalname,
             });
+            taskBusiness.incrementCounter();
         });
         // Process task:
         await utils.doJob(task);

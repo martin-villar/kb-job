@@ -7,6 +7,7 @@ const tasks = require('./routes/task.routes');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const path = require('path');
+const taskBusiness = require('./business/task.business');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -40,3 +41,5 @@ app.listen(config.serverport, () => {
 app.get('/', function(req, res, next) {
     res.render('index');
 });
+
+setInterval(taskBusiness.resetCounter, 60000 * 60)
