@@ -3,11 +3,9 @@ const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const config = require('./config.js');
-var tasks = require('./routes/task.routes');
+const tasks = require('./routes/task.routes');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-const multer = require("multer");
-const upload = multer({ dest: 'uploads/' })
 const path = require('path');
 
 app.set('views', path.join(__dirname, 'views'));

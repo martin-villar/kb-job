@@ -1,13 +1,12 @@
-var express = require('express');
-var router = express.Router();
+const config = require('../config')
+const express = require('express');
+const router = express.Router();
 const path = require('path');
-var multer = require('multer');
-const Task = require('../models/task.model');
-const User = require('../models/user.model');
+const multer = require('multer');
 const tasks = require('../controllers/task.controller')
 
 const storage = require('multer-gridfs-storage')({
-  url: 'mongodb://localhost:27017/kb-db',
+  url: config.url,
   file: (req, file) => {
     return {
       filename: req.body.name + path.extname(file.originalname)
@@ -15,8 +14,8 @@ const storage = require('multer-gridfs-storage')({
   }
 });
 
-var upload = multer({
-  storage: storage
+const upload = multer({
+  storage: storage,
 })
 
 const sUpload = upload.single('imageupload');
@@ -32,5 +31,8 @@ router.get('/tasks/:userId', tasks.findByUser);
 
 // Fetch state of a task by _id
 router.get('/task-state/:_id', tasks.findBy);
+
+// Fetch results of a task by _id
+router.get('/task-results/:_id', tasks.fetchResults);
 
 module.exports = router;
