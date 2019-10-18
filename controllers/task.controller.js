@@ -1,97 +1,9 @@
 const Task = require('../models/task.model');
 const utils = require('../utils/taskSimulator');
-const taskBusiness = require('../business/task.business');
+const counter = require('../utils/counter');
 
-// Create a task
-exports.create = async (req, res) => {
-    // ToDo - move to validator -------------/
-    let rateLimited = taskBusiness.rateLimit();
-    if(rateLimited) {
-        res.json({
-            'message': 'rate limit exceeded, task will be queued',
-        });
-        return;
-    }
-    if(!req.file) {
-        res.json({
-            'message': 'file is required',
-        });
-        return;
-    }
-    if(!req.body.userId) {
-        res.json({
-            'message': 'userId is required',
-        });
-        return;
-    }
-    if(req.file.size > 5000  /* || req.file.size < 1000*/) {
-        res.json({
-            'message': 'file size not supported',
-        });
-        return;
-    }
-    if(req.file.mimetype !== 'text/plain') {
-        res.json({
-            'message': 'file type not supported',
-        });
-        return;
-    }
-    //--------------------------------------------/
-    if (req.file) {
-        const task = new Task({
-            name: req.file.originalname,
-            userId: req.body.userId,
-            size: req.file.size,
-            state: 'uploaded',
-            fileID: req.file.id,
-        });
-        task.save(function (err) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            res.json({
-                'success': 'true',
-                'file': req.file.originalname,
-            });
-            taskBusiness.incrementCounter();
-        });
-        // Process task:
-        await utils.doJob(task);
-    } else {
-        res.send({
-            message: 'error - no file selected'
-        });
-    }
-}
 
-// Update a task
-exports.update = async (req, res) => {
-    let taskId = req._id;
-    if (taskId != undefined) {
-        task = await Task.findById(taskId);
-    }
-    if (!taskId) {
-        //res.status(404).json(new Errors.TaskNotFoundError());
-    }
-    // ToDo - move to business object-------------/
-    let taskData = {
-        name: req.name,
-        userId: req.userId,
-        size: req.size,
-        state: 'completed',
-        fileID: req.fileID,
-        jobTime: req.jobTime,
-        randNum: req.randNum,
-    }
-    try {
-        await Task.update({_id: taskId}, taskData);
-    } catch (error) {
-        throw error;
-    }
-}
-
-// Retrieve all Tasks from the database.
+// Fetch all Tasks from the database.
 exports.findAll = (req, res) => {
     Task.find()
     .then(tasks => {
@@ -120,7 +32,7 @@ exports.findByUser = (req, res) => {
             });
         }
         return res.status(500).send({
-            message: 'Something wrong retrieving task'
+            message: 'Something wrong while retrieving tasks'
         });
     });
 };
@@ -145,7 +57,7 @@ exports.findBy = (req, res) => {
             });
         }
         return res.status(500).send({
-            message: "Something wrong retrieving task"
+            message: "Something wrong while retrieving task"
         });
     });
 };
@@ -159,7 +71,6 @@ exports.fetchResults = (req, res) => {
                 message: "Task not found"
             });
         }
-        // ToDo - move to business object-------------/
         let obj = {};
         obj.id = task[0]._id;
         obj.jobTime = task[0].jobTime;
@@ -174,8 +85,90 @@ exports.fetchResults = (req, res) => {
             });
         }
         return res.status(500).send({
-            message: "Something wrong retrieving task"
+            message: "Something wrong while retrieving task"
         });
     });
 };
 
+// Create a task
+exports.create = async (req, res) => {
+    let rateLimited = counter.rateLimit();
+    if(rateLimited) {
+        res.status(500).json({
+            'message': 'task limit exceeded, try again later',
+        });
+        return;
+    }
+    if(!req.file) {
+        res.status(500).json({
+            'message': 'file is required',
+        });
+        return;
+    }
+    if(!req.body.userId) {
+        res.status(500).json({
+            'message': 'userId is required',
+        });
+        return;
+    }
+    if(req.file.size > 5000  || req.file.size < 1000) {
+        res.status(500).json({
+            'message': 'file size not supported',
+        });
+        return;
+    }
+    if(req.file.mimetype !== 'text/plain') {
+        res.status(500).json({
+            'message': 'file type not supported',
+        });
+        return;
+    }
+    if (req.file) {
+        const task = new Task({
+            name: req.file.originalname,
+            userId: req.body.userId,
+            size: req.file.size,
+            state: 'uploaded',
+            fileID: req.file.id,
+        });
+        task.save(function (err) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            res.status(200).send({
+                'success': 'true',
+                'file': req.file.originalname,
+            });
+            counter.incrementCounter();
+        });
+        // Process task:
+        res.status(200);
+        await utils.doJob(task);
+    } else {
+        res.status(500).json({
+            message: 'error - no file selected'
+        });
+    }
+}
+
+// Update a task
+exports.update = async (req, res) => {
+    let taskId = req._id;
+    let taskData = {
+        name: req.name,
+        userId: req.userId,
+        size: req.size,
+        state: 'completed',
+        fileID: req.fileID,
+        jobTime: req.jobTime,
+        randNum: req.randNum,
+    }
+    try {
+        await Task.update({_id: taskId}, taskData);
+    } catch (error) {
+        res.status(500).send({
+            message: err.message || 'Something wrong while updating the tasks.'
+        });
+    }
+}

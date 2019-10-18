@@ -13,3 +13,6 @@ Endpoints:
 
 - fetch state of a task:
 /task-state/taskId
+
+- fetch tasks results
+/task-results/taskId
