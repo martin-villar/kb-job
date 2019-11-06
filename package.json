@@ -17,7 +17,7 @@
     "cookie-parser": "~1.4.3",
     "express": "^4.16.4",
     "mocha": "^6.2.1",
-    "mongoose": "^5.4.2",
+    "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
     "multer": "^1.2.1",
     "multer-gridfs-storage": "^3.3.0",
